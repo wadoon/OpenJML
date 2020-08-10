@@ -20,6 +20,7 @@ sourceSets {
 
     openjdk {
         java { srcDir "OpenJDK/trunk/langtools/src/share/classes" }
+        resources { srcDir "OpenJDK/trunk/langtools/src/share/classes" }
     }
 
     main {
@@ -34,6 +35,8 @@ sourceSets {
         }
 
         resources {
+            srcDir "OpenJML/src"
+            srcDir "OpenJML/runtime/"
             srcDir "OpenJML/resources/"
         }
     }
