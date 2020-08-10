@@ -1,0 +1,6 @@
+[submodule "JMLAnnotations"]
+	path = JMLAnnotations
+	url = https://github.com/OpenJML/JMLAnnotations.git
+[submodule "Specs"]
+	path = Specs
+	url = https://github.com/OpenJML/Specs.git

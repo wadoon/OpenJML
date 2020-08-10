@@ -7,3 +7,9 @@
 /OpenJML/tmp
 /OpenJML/strongarm/r-analysis/notebook.nb.html
 /OpenJML/strongarm/r-analysis/notebook.Rmd
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build

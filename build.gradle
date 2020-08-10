@@ -1,0 +1,104 @@
+plugins {
+    id 'java-library'
+}
+
+test { useJUnitPlatform() }
+
+sourceSets {
+    annotations {
+        java { srcDir "JMLAnnotations/src/" }
+        resources { srcDir "JMLAnnotations/resources" }
+    }
+
+    openjmldemo {
+        java {
+            srcDir "OpenJML/demo/"
+            exclude "specs/**"
+            exclude "src/**"
+        }
+    }
+
+    openjdk {
+        java { srcDir "OpenJDK/trunk/langtools/src/share/classes" }
+    }
+
+    main {
+        java {
+            srcDir "OpenJML/src/"
+            srcDir "OpenJML/runtime/"
+            exclude "org/jmlspecs/genericmodels/**"
+            exclude "org/jmlspecs/models/resolve/unfinished/**"
+            exclude "org/jmlspecs/unfinished/**"
+            exclude "org/jmlspecs/openjml/jmldoc/**"
+            exclude "org/jmlspecs/openjml/old/**"
+        }
+
+        resources {
+            srcDir "OpenJML/resources/"
+        }
+    }
+
+    specs {
+        resources {
+            srcDir "Specs/java4"
+            srcDir "Specs/java5"
+            srcDir "Specs/java6"
+            srcDir "Specs/java7"
+            srcDir "Specs/java8"
+            //srcDir "Specs/genericmodels"
+        }
+    }
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+dependencies {
+    // Use JUnit Jupiter API for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+
+
+
+    api group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.annotation', version: '2.1.100'
+
+    //compile group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+
+    api files('OpenJML/jSMTLIB.jar')
+    api files('OpenJML/otherlibs/jpaul-2.5.1.jar')
+    api files('OpenJML/otherlibs/gson-2.8.1.jar')
+    api files('OpenJML/otherlibs/findbugs-17-annotations.jar')
+
+    api sourceSets.openjdk.output
+    api sourceSets.annotations.output
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) },
+            sourceSets.main.output,
+            sourceSets.main.allSource,
+            sourceSets.openjdk.output,
+            sourceSets.annotations.output,
+            sourceSets.specs.output
+}
+
+
+task fatJar(type: Jar) {
+    baseName = "${project.name}-${project.version}-sources.jar"
+
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) },
+            sourceSets.main.output,
+            sourceSets.main.allSource,
+            sourceSets.openjdk.output,
+            sourceSets.annotations.output,
+            sourceSets.specs.output,
+            sourceSets.openjdk.allSource,
+            sourceSets.annotations.allSource,
+            sourceSets.specs.allSource
+}
+

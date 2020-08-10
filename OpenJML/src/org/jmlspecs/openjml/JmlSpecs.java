@@ -25,7 +25,6 @@ import java.util.zip.ZipFile;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 
-import org.eclipse.core.runtime.Platform;
 import org.jmlspecs.annotation.NonNull;
 import org.jmlspecs.openjml.JmlTree.JmlAnnotation;
 import org.jmlspecs.openjml.JmlTree.JmlClassDecl;
@@ -50,7 +49,6 @@ import static org.jmlspecs.openjml.ext.SignalsOnlyClauseExtension.*;
 import static org.jmlspecs.openjml.ext.MethodExprClauseExtensions.*;
 import static org.jmlspecs.openjml.ext.TypeInitializerClauseExtension.*;
 import static org.jmlspecs.openjml.ext.MiscExtensions.*;
-import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
 
 import com.sun.tools.classfile.Annotation;
@@ -351,27 +349,7 @@ public class JmlSpecs {
         // FIXME - clean this all up and try to get rid of the dependency on eclipseSpecsProjectLocation
         // (which is used in tests) - be careful though, the UI can be tricky and operates
         // differently in development vs. deployed mode
-        
-        // This option applies for running the IDE in the development environment
-        Bundle specs = null;
-        try {
-            specs = Platform.getBundle("org.jmlspecs.Specs");
-        } catch (Exception e) {
-            // On windows an exception can be thrown
-        }
-        if (specs != null) {
-        	String pp = specs.getLocation();
-        	if (verbose) noticeWriter.println("Specs location: " + pp);
-        	int k = pp.lastIndexOf(":");
-        	if (k >= 0) pp = pp.substring(k+1);
-        	Dir dd = make(pp + "/" + libToUse);
-            if (dd.exists()) {
-                if (verbose) noticeWriter.println("Using internal specs F:" + dd);
-                dirs.add(dd);
-                return true;
-            }
-        }
-        
+
         // This option is needed for running command-line tests in the development environment.
         // sy should be the trunk directory of the Specs project
         String sy = Options.instance(context).get(Strings.eclipseSpecsProjectLocation);

@@ -18,11 +18,9 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.eclipse.core.runtime.Platform;
 import org.jmlspecs.annotation.Nullable;
 import org.jmlspecs.openjml.JmlExtension.MethodClause;
 import org.jmlspecs.openjml.ext.*;
-import org.osgi.framework.Bundle;
 
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Types;
@@ -430,26 +428,6 @@ public class Extensions {
             }
         }
 
-        bl: {
-            // This approach works when running the plug-in in development mode
-            try {
-                Bundle b = Platform.getBundle("org.jmlspecs.OpenJMLUI");
-                if (b == null) break bl;
-                Enumeration<String> paths = b.getEntryPaths("/bin/" + path);
-                while (paths.hasMoreElements()) {
-                    String pn = paths.nextElement();
-                    int k = pn.lastIndexOf('/');
-                    if (k > 0) pn = pn.substring(k+1);
-                    k = pn.lastIndexOf('.');
-                    if (k > 0) pn = pn.substring(0,k);
-                    //System.out.println("FOUND3 " + pn);
-                    foundClassNames.add(pn);
-                    methodThatWorked = 3;
-                }
-            } catch (Throwable e) {
-                // This will happen if we are not in a plug-in
-            }
-        }
         ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
         if (foundClassNames.isEmpty()) {
             //System.out.println("LAST RESORT EXTENSION");
